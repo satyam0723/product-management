@@ -71,7 +71,7 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <div className="bg-gray-900 rounded-xl overflow-hidden shadow-lg border border-b-black">
+    <div className="bg-gray-900 rounded-xl overflow-hidden shadow-lg w-64 h-[340px] border dark:border-transparent border-black/20">
       <img src={product.image} className="w-full h-48 object-cover" />
       <div className="p-4">
         <h2 className="text-lg font-semibold text-white">{product.name}</h2>

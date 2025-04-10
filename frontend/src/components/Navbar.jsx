@@ -24,7 +24,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="flex justify-between items-center p-3 bg-cyan-400 dark:bg-gray-700 border-b-1 border-gray-500">
+    <div className="flex justify-between items-center p-3 bg-stone-100 dark:bg-gray-800 border-b border-black/10 dark:border-white/10">
       <div className="text-3xl font-bold text-center text-black dark:text-white  ml-30">
         <Link to={"/"}>Product Store</Link>
       </div>
@@ -37,7 +37,7 @@ const Navbar = () => {
         </Link>
         <button className="p-2 cursor-pointer" onClick={handleDarkMode}>
           {darkMode ?
-            <MdOutlineLightMode className="size-5" /> :
+            <MdOutlineLightMode className="size-5 text-white" /> :
             <MdOutlineDarkMode className="size-5" /> 
           }
         </button>

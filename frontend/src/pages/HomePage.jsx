@@ -26,12 +26,12 @@ const HomePage = () => {
   // console.log("products:", products);
 
   return (
-    <div className="bg-stone-100 dark:bg-black min-h-screen pt-9 p-16">
+    <div className="bg-stone-100 dark:bg-gray-800 min-h-screen pt-9 p-16">
       <div className="text-black dark:text-white text-3xl font-bold text-center mb-6">
         Current Products
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+      <div className="grid gap-6 grid-cols-[repeat(auto-fill,_minmax(16rem,_1fr))]">
         {products.map((product) => (
           <ProductCard key={product._id} product={product} />
         ))}

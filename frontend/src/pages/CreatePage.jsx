@@ -2,6 +2,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { createProd } from "../features/products/productSlice.js";
+import { Link } from "react-router";
 
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({
@@ -43,7 +44,7 @@ const CreatePage = () => {
   };
 
   return (
-    <div className="bg-stone-100 dark:bg-gray-900 min-h-screen p-30">
+    <div className="bg-stone-100 dark:bg-gray-800 min-h-screen p-30">
       <div className="max-w-md mx-auto p-6">
         <h1 className="text-3xl font-bold text-center mb-6 text-black dark:text-white">
           Create new Product
@@ -87,13 +88,18 @@ const CreatePage = () => {
               }
               className="w-full border border-gray-300 rounded-lg p-2"
             />
-
-            <input
-              type="submit"
-              value="Add product"
-              className="cursor-pointer w-full bg-blue-500 text-white rounded-lg py-2"
-              // onClick={handleAddProduct}
-            />
+            <div className="flex justify-between">
+              <input
+                type="submit"
+                value="Add product"
+                className="cursor-pointer bg-cyan-600 text-white rounded-lg p-2 "
+              />
+              <Link to="/">
+                <div className="cursor-pointer bg-cyan-600 text-white rounded-lg p-2">
+                  Return to Home
+                </div>
+              </Link>
+            </div>
           </form>
         </div>
       </div>
