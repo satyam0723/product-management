@@ -24,5 +24,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
-// 118000982815017

@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useProductStore } from "../store/product.js";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { createProd } from "../features/products/productSlice.js";
 
 const CreatePage = () => {
   const [newProduct, setNewProduct] = useState({
@@ -8,12 +9,30 @@ const CreatePage = () => {
     price: "",
     image: "",
   });
+  const dispatch = useDispatch();
 
-  const { createProduct } = useProductStore();
+  const createProduct = async (newProduct) => {
+    if (
+      !newProduct.name.trim() ||
+      !newProduct.image.trim() ||
+      !String(newProduct.price).trim()
+    ) {
+      return { success: false, message: "please fill in all fields." };
+    }
+    const res = await fetch("http://localhost:5000/api/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newProduct),
+    });
+    const data = await res.json();
+    if (data.success) dispatch(createProd(data.data));
+    return { success: data.success, message: data.message };
+  };
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
-    console.log(newProduct);
     const { success, message } = await createProduct(newProduct);
     if (success) {
       toast.success("Product added successfully");
@@ -30,8 +49,11 @@ const CreatePage = () => {
           Create new Product
         </h1>
 
-        <div >
-          <form onSubmit={handleAddProduct} className="bg-blue-50 shadow-lg rounded-lg space-y-4 p-6">
+        <div>
+          <form
+            onSubmit={handleAddProduct}
+            className="bg-blue-50 shadow-lg rounded-lg space-y-4 p-6"
+          >
             <input
               type="text"
               placeholder="Product name"
@@ -59,7 +81,6 @@ const CreatePage = () => {
               type="url"
               placeholder="Image URL"
               name="image"
-              
               value={newProduct.image}
               onChange={(e) =>
                 setNewProduct({ ...newProduct, image: e.target.value })

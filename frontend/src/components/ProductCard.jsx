@@ -1,33 +1,75 @@
 import { useEffect, useState } from "react";
-import { useProductStore } from "../store/product";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { updateProd, deleteProd } from "../features/products/productSlice.js";
 
 const ProductCard = ({ product }) => {
+  // console.log(product._id);
   const [updatedProduct, setUpdatedProduct] = useState(product);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { deleteProduct } = useProductStore();
-  const {updateProduct} = useProductStore();
-  useEffect(()=>{setUpdatedProduct(product)},[isModalOpen]);
-  
-  const handleDeleteProduct = async (pid) => {  
-    const { success, message } = await deleteProduct(pid);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setUpdatedProduct(product);
+  }, [isModalOpen]);
+
+  const deleteProduct = async () => {
+    const res = await fetch(
+      `http://localhost:5000/api/products/${product._id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    const data = await res.json();
+
+    if (data.success) dispatch(deleteProd(product._id));
+    return { success: data.success, message: data.message };
+  };
+  const updateProduct = async () => {
+    if (
+      !updatedProduct.name.trim() ||
+      !updatedProduct.image.trim() ||
+      !String(updatedProduct.price).trim()
+    ) {
+      return { success: false, message: "please fill in all fields." };
+    }
+    const res = await fetch(
+      `http://localhost:5000/api/products/${product._id}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedProduct),
+      }
+    );
+    const data = await res.json();
+    if (data.success) {
+      const newProduct = data.data;
+      const pid = product._id;
+      dispatch(updateProd({ pid, newProduct }));
+    }
+    return { success: data.success, message: data.message };
+  };
+  const handleDeleteProduct = async () => {
+    const { success, message } = await deleteProduct();
     if (success) {
-			toast.success(message);
-		} else {
-			toast.error(message);
-		}
+      toast.success(message);
+    } else {
+      toast.error(message);
+    }
   };
   const handleUpdateProduct = async (e) => {
     e.preventDefault();
-    const { success, message } = await updateProduct(product._id, updatedProduct);
+    const { success, message } = await updateProduct();
     if (success) {
-      toast.success('Product updated successfully');
+      toast.success("Product updated successfully");
       setIsModalOpen(false);
-		} else {
-			toast.error(message);
-		}
-	};
-  
+    } else {
+      toast.error(message);
+    }
+  };
+
   return (
     <div className="bg-gray-900 rounded-xl overflow-hidden shadow-lg">
       <img src={product.image} className="w-full h-48 object-cover" />
@@ -42,7 +84,7 @@ const ProductCard = ({ product }) => {
             ✏ Edit
           </button>
           <button
-            onClick={() => handleDeleteProduct(product._id)}
+            onClick={handleDeleteProduct}
             className="bg-red-600 text-white px-4 py-2 rounded flex items-center"
           >
             🗑 Delete
@@ -57,54 +99,57 @@ const ProductCard = ({ product }) => {
             >
               <h2 className="text-xl font-semibold mb-4">Update Product</h2>
               <form onSubmit={handleUpdateProduct}>
-              <input
-                type="text"
-                placeholder="Product Name"
-                className="w-full border p-2 mb-3 rounded"
-                value={updatedProduct.name}
-                onChange={(e) =>
-                  setUpdatedProduct({ ...updatedProduct, name: e.target.value })
-                }
-              />
-              <input
-                type="number"
-                placeholder="Price"
-                className="w-full border p-2 mb-3 rounded"
-                value={updatedProduct.price}
-                onChange={(e) =>
-                  setUpdatedProduct({
-                    ...updatedProduct,
-                    price: e.target.value,
-                  })
-                }
-              />
-              <input
-                type="url"
-                placeholder="Image URL"
-                className="w-full border p-2 mb-3 rounded"
-                value={updatedProduct.image}
-                onChange={(e) =>
-                  setUpdatedProduct({
-                    ...updatedProduct,
-                    image: e.target.value,
-                  })
-                }
-              />
-
-              <div className="flex justify-end gap-2 mt-4">
                 <input
-                type="submit"
-                value="Update"
-                  className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                  type="text"
+                  placeholder="Product Name"
+                  className="w-full border p-2 mb-3 rounded"
+                  value={updatedProduct.name}
+                  onChange={(e) =>
+                    setUpdatedProduct({
+                      ...updatedProduct,
+                      name: e.target.value,
+                    })
+                  }
                 />
-                
-                <button
-                  onClick={() => setIsModalOpen(false)}
-                  className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-              </div>
+                <input
+                  type="number"
+                  placeholder="Price"
+                  className="w-full border p-2 mb-3 rounded"
+                  value={updatedProduct.price}
+                  onChange={(e) =>
+                    setUpdatedProduct({
+                      ...updatedProduct,
+                      price: e.target.value,
+                    })
+                  }
+                />
+                <input
+                  type="url"
+                  placeholder="Image URL"
+                  className="w-full border p-2 mb-3 rounded"
+                  value={updatedProduct.image}
+                  onChange={(e) =>
+                    setUpdatedProduct({
+                      ...updatedProduct,
+                      image: e.target.value,
+                    })
+                  }
+                />
+
+                <div className="flex justify-end gap-2 mt-4">
+                  <input
+                    type="submit"
+                    value="Update"
+                    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                  />
+
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </form>
 
               <button
