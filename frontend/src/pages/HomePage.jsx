@@ -26,8 +26,8 @@ const HomePage = () => {
   // console.log("products:", products);
 
   return (
-    <div className="bg-black min-h-screen pt-9 p-16">
-      <div className="text-white text-3xl font-bold text-center mb-6">
+    <div className="bg-stone-100 dark:bg-black min-h-screen pt-9 p-16">
+      <div className="text-black dark:text-white text-3xl font-bold text-center mb-6">
         Current Products
       </div>
 
@@ -37,7 +37,7 @@ const HomePage = () => {
         ))}
       </div>
       {products.length === 0 && (
-        <div className="text-white text-center font-bold">
+        <div className="text-black text-center font-bold dark:text-white">
           No product Found
           <Link to={"/create"}>
             <div className="text-blue-500 hover:underline">
