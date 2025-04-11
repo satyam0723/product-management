@@ -20,7 +20,7 @@ const CreatePage = () => {
     ) {
       return { success: false, message: "please fill in all fields." };
     }
-    const res = await fetch("/api/products", {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/products`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
