@@ -15,7 +15,7 @@ const ProductCard = ({ product }) => {
 
   const deleteProduct = async () => {
     const res = await fetch(
-      `http://localhost:5000/api/products/${product._id}`,
+      `/api/products/${product._id}`,
       {
         method: "DELETE",
       }
@@ -34,7 +34,7 @@ const ProductCard = ({ product }) => {
       return { success: false, message: "please fill in all fields." };
     }
     const res = await fetch(
-      `http://localhost:5000/api/products/${product._id}`,
+      `/api/products/${product._id}`,
       {
         method: "PUT",
         headers: {

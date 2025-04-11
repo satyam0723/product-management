@@ -7,16 +7,10 @@ import { setProd } from "../features/products/productSlice.js";
 const HomePage = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.product.products);
-  const fetchProducts = async () => {
-    const res = await fetch("http://localhost:5000/api/products");
-    const data = await res.json();
-    const prod = data.data;
-    dispatch(setProd(prod));
-  };
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const res = await fetch("http://localhost:5000/api/products");
+      const res = await fetch("/api/products");
       const data = await res.json();
       const prod = data.data;
       dispatch(setProd(prod));
