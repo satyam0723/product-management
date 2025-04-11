@@ -23,4 +23,4 @@ app.listen(port, () => {
   console.log(`server started at port at http://localhost:${port}`);
 });
 
-export default app;
+export {app};
