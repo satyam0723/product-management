@@ -1,26 +1,16 @@
 import dotenv from "dotenv";
-import express from "express";
 import connectDB from "./db/db.js";
-import productRoutes from "./routes/product.route.js";
-import cors from "cors";
+import { app } from "./app.js";
 dotenv.config();
 
-const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors({
-  origin: process.env.CORS_ORIGIN,
-  credentials: true
-}))
-app.use(express.json());
-app.use("/api/products", productRoutes);
-app.get("/", (req, res) => {
-  res.send("Welcome to Products API");
-});
-
-app.listen(port, () => {
-  connectDB();
-  console.log(`server started at port at http://localhost:${port}`);
-});
-
-export {app};
+connectDB()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`server is running at http://localhost:${port}/`);
+    });
+  })
+  .catch((err) => {
+    console.log("MONGODB connection failed", err);
+  });
